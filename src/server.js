@@ -45,6 +45,41 @@ app.post("/expenses", (req, res) => {
   res.status(201).json(expense);
 });
 
+app.put("/expenses/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const { title, amount } = req.body;
+
+  // Find the expense
+  const expense = expenses.find((expense) => expense.id === id);
+
+  if (!expense) {
+    return res.status(404).json({
+      error: "Expense not found",
+    });
+  }
+
+  // Validate input
+  if (!title || amount === undefined) {
+    return res.status(400).json({
+      error: "Title and amount are required",
+    });
+  }
+
+  if (typeof amount !== "number" || amount <= 0) {
+    return res.status(400).json({
+      error: "Amount must be a positive number",
+    });
+  }
+
+  // Update expense
+  expense.title = title;
+  expense.amount = amount;
+
+  res.json({
+    message: "Expense updated successfully",
+    expense,
+  });
+});
 
 app.delete("/expenses/:id", (req, res) => {
   const id = Number(req.params.id);
