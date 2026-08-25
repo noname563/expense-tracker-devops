@@ -10,41 +10,49 @@
 
 <body>
   <main class="container">
+  <header class="header">
     <h1>Expense Tracker</h1>
+    <p>Track and manage your daily expenses</p>
+  </header>
 
-    <form id="expense-form">
-  <input
-    type="text"
-    id="title"
-    placeholder="Expense title"
-    required
-  />
+  <section class="card">
+    <form id="expense-form" class="form-grid">
+      <input
+        type="text"
+        id="title"
+        placeholder="What did you spend on?"
+        required
+      />
 
-  <input
-    type="number"
-    id="amount"
-    placeholder="Amount"
-    min="1"
-    required
-  />
+      <input
+        type="number"
+        id="amount"
+        placeholder="Amount"
+        min="1"
+        required
+      />
 
-  <button type="submit" id="submit-button">
-    Add Expense
-  </button>
+      <button type="submit" id="submit-button">
+        Add Expense
+      </button>
 
-  <button type="button" id="cancel-button" hidden>
-    Cancel
-  </button>
-</form>
+      <button type="button" id="cancel-button" hidden>
+        Cancel
+      </button>
+    </form>
+  </section>
 
-    <section>
+  <section class="card">
+    <div class="section-header">
       <h2>Your Expenses</h2>
+      <span class="expense-count" id="expense-count">0 expenses</span>
+    </div>
 
-      <div id="expense-list">
-        <p>No expenses yet.</p>
-      </div>
-    </section>
-  </main>
+    <div id="expense-list">
+      <p class="empty-state">No expenses yet.</p>
+    </div>
+  </section>
+</main>
 
   <script src="app.js"></script>
 </body>

@@ -1,5 +1,5 @@
 const express = require("express");
-
+require("./config/database");
 const expenseRoutes = require("./routes/expenseRoutes");
 
 const app = express();

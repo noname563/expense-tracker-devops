@@ -4,13 +4,16 @@ const amountInput = document.getElementById("amount");
 const expenseList = document.getElementById("expense-list");
 const submitButton = document.getElementById("submit-button");
 const cancelButton = document.getElementById("cancel-button");
+const expenseCount = document.getElementById("expense-count");
 
 let editingExpenseId = null;
 
 async function loadExpenses() {
   const response = await fetch("/expenses");
   const expenses = await response.json();
-
+  
+  expenseCount.textContent =
+  `${expenses.length} expense${expenses.length !== 1 ? "s" : ""}`;
   expenseList.innerHTML = "";
 
   if (expenses.length === 0) {
@@ -24,20 +27,27 @@ async function loadExpenses() {
     expenseElement.classList.add("expense-item");
 
     expenseElement.innerHTML = `
-      <span>
-        ${expense.title} - ₹${expense.amount}
-      </span>
+  <div class="expense-info">
+    <span class="expense-title">${expense.title}</span>
+    <span class="expense-amount">₹${expense.amount}</span>
+  </div>
 
-      <div>
-        <button onclick="editExpense(${expense.id}, '${expense.title}', ${expense.amount})">
-          Edit
-        </button>
+  <div class="expense-actions">
+    <button
+      class="edit-button"
+      onclick="editExpense(${expense.id}, '${expense.title}', ${expense.amount})"
+    >
+      Edit
+    </button>
 
-        <button onclick="deleteExpense(${expense.id})">
-          Delete
-        </button>
-      </div>
-    `;
+    <button
+      class="delete-button"
+      onclick="deleteExpense(${expense.id})"
+    >
+      Delete
+    </button>
+  </div>
+`;
 
     expenseList.appendChild(expenseElement);
   });
