@@ -13,23 +13,29 @@
     <h1>Expense Tracker</h1>
 
     <form id="expense-form">
-      <input
-        type="text"
-        id="title"
-        placeholder="Expense title"
-        required
-      />
+  <input
+    type="text"
+    id="title"
+    placeholder="Expense title"
+    required
+  />
 
-      <input
-        type="number"
-        id="amount"
-        placeholder="Amount"
-        min="1"
-        required
-      />
+  <input
+    type="number"
+    id="amount"
+    placeholder="Amount"
+    min="1"
+    required
+  />
 
-      <button type="submit">Add Expense</button>
-    </form>
+  <button type="submit" id="submit-button">
+    Add Expense
+  </button>
+
+  <button type="button" id="cancel-button" hidden>
+    Cancel
+  </button>
+</form>
 
     <section>
       <h2>Your Expenses</h2>

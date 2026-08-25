@@ -2,10 +2,13 @@ const form = document.getElementById("expense-form");
 const titleInput = document.getElementById("title");
 const amountInput = document.getElementById("amount");
 const expenseList = document.getElementById("expense-list");
+const submitButton = document.getElementById("submit-button");
+const cancelButton = document.getElementById("cancel-button");
+
+let editingExpenseId = null;
 
 async function loadExpenses() {
   const response = await fetch("/expenses");
-
   const expenses = await response.json();
 
   expenseList.innerHTML = "";
@@ -25,9 +28,15 @@ async function loadExpenses() {
         ${expense.title} - ₹${expense.amount}
       </span>
 
-      <button onclick="deleteExpense(${expense.id})">
-        Delete
-      </button>
+      <div>
+        <button onclick="editExpense(${expense.id}, '${expense.title}', ${expense.amount})">
+          Edit
+        </button>
+
+        <button onclick="deleteExpense(${expense.id})">
+          Delete
+        </button>
+      </div>
     `;
 
     expenseList.appendChild(expenseElement);
@@ -40,22 +49,55 @@ form.addEventListener("submit", async (event) => {
   const title = titleInput.value;
   const amount = Number(amountInput.value);
 
-  await fetch("/expenses", {
-    method: "POST",
+  if (editingExpenseId) {
+    await fetch(`/expenses/${editingExpenseId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        amount,
+      }),
+    });
 
-    headers: {
-      "Content-Type": "application/json",
-    },
+    editingExpenseId = null;
+    submitButton.textContent = "Add Expense";
+    cancelButton.hidden = true;
+  } else {
+    await fetch("/expenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        amount,
+      }),
+    });
+  }
 
-    body: JSON.stringify({
-      title,
-      amount,
-    }),
-  });
+  form.reset();
+  loadExpenses();
+});
+
+function editExpense(id, title, amount) {
+  editingExpenseId = id;
+
+  titleInput.value = title;
+  amountInput.value = amount;
+
+  submitButton.textContent = "Update Expense";
+  cancelButton.hidden = false;
+}
+
+cancelButton.addEventListener("click", () => {
+  editingExpenseId = null;
 
   form.reset();
 
-  loadExpenses();
+  submitButton.textContent = "Add Expense";
+  cancelButton.hidden = true;
 });
 
 async function deleteExpense(id) {
